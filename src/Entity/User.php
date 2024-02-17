@@ -48,6 +48,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $creationDate = null;
 
+    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Patient $Patient = null;
+
+    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Secretary $Secretary = null;
+
+    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Doctor $Doctor = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -186,6 +195,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCreationDate(int $creationDate): static
     {
         $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
+    public function getPatient(): ?Patient
+    {
+        return $this->Patient;
+    }
+
+    public function setPatient(?Patient $Patient): static
+    {
+        $this->Patient = $Patient;
+
+        return $this;
+    }
+
+    public function getSecretary(): ?Secretary
+    {
+        return $this->Secretary;
+    }
+
+    public function setSecretary(?Secretary $Secretary): static
+    {
+        $this->Secretary = $Secretary;
+
+        return $this;
+    }
+
+    public function getDoctor(): ?Doctor
+    {
+        return $this->Doctor;
+    }
+
+    public function setDoctor(?Doctor $Doctor): static
+    {
+        $this->Doctor = $Doctor;
 
         return $this;
     }

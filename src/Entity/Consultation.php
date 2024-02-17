@@ -27,6 +27,17 @@ class Consultation
     #[ORM\OneToMany(targetEntity: Analyse::class, mappedBy: 'consultation')]
     private Collection $Analyses;
 
+    #[ORM\OneToOne(mappedBy: 'Consultation', cascade: ['persist', 'remove'])]
+    private ?Appointment $appointment = null;
+
+    #[ORM\ManyToOne(inversedBy: 'Consultations')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Patient $patient = null;
+
+    #[ORM\ManyToOne(inversedBy: 'Consultations')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Doctor $doctor = null;
+
     public function __construct()
     {
         $this->Analyses = new ArrayCollection();
@@ -99,6 +110,52 @@ class Consultation
                 $analysis->setConsultation(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAppointment(): ?Appointment
+    {
+        return $this->appointment;
+    }
+
+    public function setAppointment(?Appointment $appointment): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($appointment === null && $this->appointment !== null) {
+            $this->appointment->setConsultation(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($appointment !== null && $appointment->getConsultation() !== $this) {
+            $appointment->setConsultation($this);
+        }
+
+        $this->appointment = $appointment;
+
+        return $this;
+    }
+
+    public function getPatient(): ?Patient
+    {
+        return $this->patient;
+    }
+
+    public function setPatient(?Patient $patient): static
+    {
+        $this->patient = $patient;
+
+        return $this;
+    }
+
+    public function getDoctor(): ?Doctor
+    {
+        return $this->doctor;
+    }
+
+    public function setDoctor(?Doctor $doctor): static
+    {
+        $this->doctor = $doctor;
 
         return $this;
     }
