@@ -18,10 +18,12 @@ class DoctorType extends AbstractType
             ->add('officeRegion')
             ->add('officeAddress')
             ->add('officePhone')
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-'choice_label' => 'id',
-            ])
+            
+//             ->add('user', EntityType::class, [
+//                 'class' => User::class,
+// 'choice_label' => 'id',
+//             ])
+
         ;
     }
 

@@ -27,13 +27,14 @@ class PatientController extends AbstractController
     {
         $patient = new Patient();
         $form = $this->createForm(PatientType::class, $patient);
+        $patient->setUser( $this->getUser());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($patient);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_patient_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('patient/new.html.twig', [

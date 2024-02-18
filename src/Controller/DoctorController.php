@@ -27,13 +27,14 @@ class DoctorController extends AbstractController
     {
         $doctor = new Doctor();
         $form = $this->createForm(DoctorType::class, $doctor);
+        $doctor->setUser( $this->getUser());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($doctor);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_doctor_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('doctor/new.html.twig', [

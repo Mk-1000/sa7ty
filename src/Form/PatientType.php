@@ -15,10 +15,10 @@ class PatientType extends AbstractType
     {
         $builder
             ->add('region')
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-'choice_label' => 'id',
-            ])
+//             ->add('user', EntityType::class, [
+//                 'class' => User::class,
+// 'choice_label' => 'id',
+//             ])
         ;
     }
 

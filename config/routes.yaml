@@ -7,6 +7,7 @@ controllers:
 app_login:
     path: /login
     controller: App\Controller\SecurityController::login
+    methods: ['GET', 'POST']
 
 app_home:
     path: /

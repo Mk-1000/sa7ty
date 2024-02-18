@@ -59,16 +59,17 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
             // do anything else you need here, like send an email
             // Redirect based on user role
-            switch ($roles) {
-                case 'ROLE_DOCTOR':
-                    return $this->redirectToRoute('app_doctor_new');
-                case 'ROLE_SECRETARY':
-                    return $this->redirectToRoute('app_secretary_new');
-                case 'ROLE_PATIENT':
-                    return $this->redirectToRoute('app_patient_new');
-                default:
-                    return $this->redirectToRoute('_profiler_home');
-            }
+            return $this->redirectToRoute('app_login');
+            // switch ($roles) {
+            //     case 'ROLE_DOCTOR':
+            //         return $this->redirectToRoute('app_doctor_new');
+            //     case 'ROLE_SECRETARY':
+            //         return $this->redirectToRoute('app_secretary_new');
+            //     case 'ROLE_PATIENT':
+            //         return $this->redirectToRoute('app_patient_new');
+            //     default:
+            //         return $this->redirectToRoute('_profiler_home');
+            // }
         }
 
         return $this->render('registration/register.html.twig', [

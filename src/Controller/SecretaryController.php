@@ -26,21 +26,23 @@ class SecretaryController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $secretary = new Secretary();
+        $secretary->setUser($this->getUser()); // Set the user for the secretary
         $form = $this->createForm(SecretaryType::class, $secretary);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($secretary);
             $entityManager->flush();
-
-            return $this->redirectToRoute('app_secretary_index', [], Response::HTTP_SEE_OTHER);
+    
+            return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
         }
-
+    
         return $this->render('secretary/new.html.twig', [
             'secretary' => $secretary,
             'form' => $form,
         ]);
     }
+    
 
     #[Route('/{id}', name: 'app_secretary_show', methods: ['GET'])]
     public function show(Secretary $secretary): Response
@@ -54,6 +56,7 @@ class SecretaryController extends AbstractController
     public function edit(Request $request, Secretary $secretary, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(SecretaryType::class, $secretary);
+        $secretary->setUser( $this->getUser());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

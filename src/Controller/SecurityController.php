@@ -24,7 +24,7 @@ class SecurityController extends AbstractController
                     }
                     // Redirect to the route to show the doctor details
                     return $this->redirectToRoute('app_doctor_show', ['id' => $doctor->getId()]);
-        
+
                 case 'ROLE_SECRETARY':
                     // Check if the user has a secretary entity
                     $secretary = $this->getUser()->getSecretary();
@@ -33,7 +33,7 @@ class SecurityController extends AbstractController
                     }
                     // Redirect to the route to show the secretary details
                     return $this->redirectToRoute('app_secretary_show', ['id' => $secretary->getId()]);
-        
+
                 case 'ROLE_PATIENT':
                     // Check if the user has a patient entity
                     $patient = $this->getUser()->getPatient();
@@ -42,12 +42,11 @@ class SecurityController extends AbstractController
                     }
                     // Redirect to the route to show the patient details
                     return $this->redirectToRoute('app_patient_show', ['id' => $patient->getId()]);
-        
+
                 default:
                     return $this->redirectToRoute('app_logout');
             }
         }
-        
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -56,6 +55,7 @@ class SecurityController extends AbstractController
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
+
 
 
     #[Route(path: '/logout', name: 'app_logout')]
