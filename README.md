@@ -26,3 +26,9 @@ List the key features of your project.
 - ...
 
 ## Installation
+
+composer require symfony/security-bundle
+symfony console d:d:c
+symfony console make:migration
+symfony console d:m:m
+symfony server:start
