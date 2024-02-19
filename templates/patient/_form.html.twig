@@ -1,4 +1,12 @@
-{{ form_start(form) }}
+{# {{ form_start(form) }}
     {{ form_widget(form) }}
     <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }} #}
+
+{{ form_start(form, {'attr': {'class': 'appointment-form2'}}) }}
+                <h4 class="form-title">Complétez votre enregistrement</h4>
+
+            {{ form_row(form.region, {'attr': {'class': 'form-select'}}) }}
+            <br>
+    <button class="th-btn btn-fw">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
