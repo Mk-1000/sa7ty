@@ -35,15 +35,15 @@
 		name="theme-color" content="#ffffff">
 
 		<!--==============================
-								        Google Fonts
-								        ============================== -->
+										        Google Fonts
+										        ============================== -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100;9..40,200;9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 		<!--==============================
-								            All CSS File
-								        ============================== -->
+										            All CSS File
+										        ============================== -->
 		<!-- Bootstrap -->
 		<link
 		rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}"> <!-- Fontawesome Icon -->
@@ -68,60 +68,20 @@
 		{% endblock %}
 	</head>
 
-	{# <a class="navbar-brand" href="#">Your Website</a>
-				
-				    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-				        <ul class="navbar-nav ml-auto">
-				            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-				                <li class="nav-item">
-				                    <span class="nav-link">Logged in as {{ app.user.userIdentifier }}</span>
-				                </li>
-				                <li class="nav-item">
-				                    <a class="nav-link" href="{{ path('app_logout') }}">Log out</a>
-				                </li>
-				                {% if app.user.patient != null %}
-				                    <li class="nav-item">
-				                        <a class="nav-link" href="{{ path('app_logout') }}">Log out</a>
-				                    </li>
-				                {% endif %}
-				                
-				                {% if app.user.doctor != null %}
-				                    <li class="nav-item">
-				                        <a class="nav-link" href="{{ path('app_logout') }}">Log out</a>
-				                    </li>
-				                {% endif %}
-				
-				                {% if app.user.secretary != null %}
-				                    <li class="nav-item">
-				                        <a class="nav-link" href="{{ path('app_logout') }}">Log out</a>
-				                    </li>
-				                {% endif %}
-				
-				            {% else %}
-				                <li class="nav-item">
-				                    <a class="nav-link" href="{{ path('app_register') }}">register</a>
-				                </li>
-				                <li class="nav-item">
-				                    <a class="nav-link" href="{{ path('app_login') }}">Log in</a>
-				                </li>
-				            {% endif %}
-				        </ul>
-				    </div> #}
-
 	<body>
 
 		<!--==============================
-								     Preloader
-								  ==============================-->
+										     Preloader
+										  ==============================-->
 		{# <div class="preloader ">
-								        <div class="preloader-inner">
-								            <div class="loader"></div>
-								        </div>
-								    </div> #}
+										        <div class="preloader-inner">
+										            <div class="loader"></div>
+										        </div>
+										    </div> #}
 
 			{% if is_granted('IS_AUTHENTICATED_FULLY') %}
 			<!--Mobile Menu
-											  ============================== -->
+														  ============================== -->
 				<div class="th-menu-wrapper"> <div class="th-menu-area text-center">
 					<button class="th-menu-toggle">
 						<i class="fal fa-times"></i>
@@ -134,14 +94,14 @@
 							{% if app.user %}
 								{% if app.user.patient %}
 									<li>
-										<a href="#">Doctors</a>
+										<a href="{{ path('app_doctor_index')}}">Doctors</a>
 
 									</li>
-                                    									<li>
+									<li>
 										<a href="#">Dossier médical</a>
 
 									</li>
-                                    									<li>
+									<li>
 										<a href="#">Réservations</a>
 
 									</li>
@@ -182,8 +142,8 @@
 				</div>
 			</div>
 			<!--==============================
-												Header Area
-											==============================-->
+															Header Area
+														==============================-->
 			<header class="th-header header-layout1">
 
 				<div
@@ -201,33 +161,35 @@
 								<div class="col-auto d-none d-lg-inline-block">
 									<nav class="main-menu d-none d-lg-inline-block">
 										<ul>
-{% if app.user %}
-								{% if app.user.patient %}
-									<li>
-										<a href="#">Doctors</a>
+											{% if app.user %}
+												{% if app.user.patient %}
+													<li>
+														<a href="{{ path('app_doctor_index')}}">Doctors</a>
 
-									</li>
-                                    									<li>
-										<a href="#">Dossier médical</a>
+													</li>
+													<li>
+														<a href="#">Dossier médical</a>
 
-									</li>
-                                    									<li>
-										<a href="#">Réservations</a>
+													</li>
+													<li>
+														<a href="{{ path('app_appointment_index')}}">Réservations</a>
 
-									</li>
-								{% elseif app.user.secretary %}
-									<li>
-										<a href="#">Doctors</a>
+													</li>
+												{% elseif app.user.secretary %}
+													<li>
+														<a href="#">Doctors</a>
 
-									</li>
-								{% elseif app.user.doctor %}
-									<li>
-										<a href="#">Cabinet</a>
+													</li>
+												{% elseif app.user.doctor %}
+													<li>
+														<a href="#">Cabinet</a>
 
-									</li>
-								{% endif %}
-							{% endif %}
-											<li><a href="#">Blog</a></li>
+													</li>
+												{% endif %}
+											{% endif %}
+											<li>
+												<a href="#">Blog</a>
+											</li>
 
 										</ul>
 									</nav>
@@ -260,7 +222,7 @@
 			</header>
 		{% else %}
 			<!--Mobile Menu
-											  ============================== -->
+														  ============================== -->
 			<div class="th-menu-wrapper">
 				<div class="th-menu-area text-center">
 					<button class="th-menu-toggle">
@@ -302,8 +264,8 @@
 				</div>
 			</div>
 			<!--==============================
-												Header Area
-											==============================-->
+															Header Area
+														==============================-->
 			<header class="th-header header-layout1">
 
 				<div
@@ -375,8 +337,8 @@
 	</body>
 
 	<!--==============================
-					Footer Area
-				==============================-->
+						Footer Area
+					==============================-->
 	{% if is_granted('IS_AUTHENTICATED_FULLY')== false %}
 		<footer class="footer-wrapper footer-layout1" data-bg-src="assets/img/bg/footer_bg_1.jpg">
 			<div class="container z-index-common">
@@ -556,8 +518,8 @@
 
 	{% block addJavascripts %}
 		<!--==============================
-								    All Js File
-								============================== -->
+										    All Js File
+										============================== -->
 		<!-- Jquery --><script src="{{asset('assets/js/vendor/jquery-3.7.1.min.js')}}"> </script>
 		<!-- Swiper Js -->
 		<script src="{{asset('assets/js/swiper-bundle.min.js')}}"></script>
