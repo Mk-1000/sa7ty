@@ -31,4 +31,10 @@ class InfoController extends AbstractController
     {
         return $this->render('info/contact.html.twig');
     }
+
+    #[Route('/thankYouPage', name: 'app_thankYouPage')]
+    public function thankYouPage(): Response
+    {
+        return $this->render('info/thankYouPage.html.twig');
+    }
 }

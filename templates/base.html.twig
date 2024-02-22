@@ -79,7 +79,7 @@
 										        </div>
 										    </div> #}
 
-			{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+			{% if app.user %}
 			<!--Mobile Menu
 														  ============================== -->
 				<div class="th-menu-wrapper"> <div class="th-menu-area text-center">
@@ -87,7 +87,7 @@
 						<i class="fal fa-times"></i>
 					</button>
 					<div class="mobile-logo">
-						<a href="home-medical-clinic.html"><img src="assets/img/logo.svg" alt="Mediax"></a>
+						<a href="home-medical-clinic.html"><img src="{{ asset('assets/img/logo.svg')}}" alt="Mediax"></a>
 					</div>
 					<div class="th-mobile-menu">
 						<ul>
@@ -366,15 +366,15 @@
 									<p class="about-text">Subscribe to out newsletter today to receive latest news administrate cost effective for tactical data.</p>
 									<p class="footer-info">
 										<i class="fal fa-location-dot"></i>
-										2478 Street City Ohio 90255
+										Monastir Esprim
 									</p>
 									<p class="footer-info">
 										<i class="fal fa-envelope"></i>
-										<a href="mailto:info@mediax.com" class="info-box_link">info@mediax.com</a>
+										<a href="mailto:sa7ty.contact@gmail.com" class="info-box_link">sa7ty.contact@gmail.com</a>
 									</p>
 									<p class="footer-info">
 										<i class="fal fa-phone"></i>
-										<a href="tel:+40276328246" class="info-box_link">+(402) 763 282 46</a>
+										<a href="tel:+40276328246" class="info-box_link">+(216) 50 430 778</a>
 									</p>
 								</div>
 							</div>
@@ -388,19 +388,16 @@
 											<a href="{{ path('app_about') }}">About Us</a>
 										</li>
 										<li>
-											<a href="about.html">Terms of Use</a>
+											<a href="">Terms of Use</a>
 										</li>
 										<li>
-											<a href="service.html">Our Services</a>
+											<a href="">Our Services</a>
 										</li>
 										<li>
-											<a href="faq.html">Help & FAQs</a>
+											<a href="{{ path('app_blog_index') }}">Blog</a>
 										</li>
 										<li>
-											<a href="blog.html">Blog</a>
-										</li>
-										<li>
-											<a href="about.html">Privacy policy</a>
+											<a href="">Privacy policy</a>
 										</li>
 										<li>
 											<a href="{{ path('app_contact') }}">Contact Us</a>
@@ -439,7 +436,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-6 col-xl-auto">
+						{# <div class="col-md-6 col-xl-auto">
 							<div class="widget footer-widget">
 								<h3 class="widget_title">Recent Posts</h3>
 								<div class="recent-post-wrap">
@@ -473,7 +470,7 @@
 									</div>
 								</div>
 							</div>
-						</div>
+						</div> #}
 					</div>
 				</div>
 			</div>
