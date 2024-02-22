@@ -39,6 +39,10 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/consultation/new, roles: ROLE_DOCTOR }
+        # - { path: ^/blog/new, roles: ROLE_DOCTOR }
+        # - { path: ^/blog/edit, roles: ROLE_DOCTOR }
+
+        
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
 

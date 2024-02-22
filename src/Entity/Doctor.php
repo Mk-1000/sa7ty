@@ -33,9 +33,13 @@ class Doctor
     #[ORM\OneToOne(mappedBy: 'Doctor', cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
+    #[ORM\OneToMany(targetEntity: Blog::class, mappedBy: 'doctor', orphanRemoval: true)]
+    private Collection $blogs;
+
     public function __construct()
     {
         $this->Consultations = new ArrayCollection();
+        $this->blogs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -139,6 +143,36 @@ class Doctor
         }
 
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Blog>
+     */
+    public function getBlogs(): Collection
+    {
+        return $this->blogs;
+    }
+
+    public function addBlog(Blog $blog): static
+    {
+        if (!$this->blogs->contains($blog)) {
+            $this->blogs->add($blog);
+            $blog->setDoctor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBlog(Blog $blog): static
+    {
+        if ($this->blogs->removeElement($blog)) {
+            // set the owning side to null (unless already changed)
+            if ($blog->getDoctor() === $this) {
+                $blog->setDoctor(null);
+            }
+        }
 
         return $this;
     }
