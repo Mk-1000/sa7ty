@@ -16,7 +16,6 @@ class PatientType extends AbstractType
     {
         $builder
         ->add('region', ChoiceType::class, [
-            'mapped' => false,
             'choices' => [
                 'Monastir' => 'Monastir',
                 'Sousse' => 'Sousse',

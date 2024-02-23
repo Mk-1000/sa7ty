@@ -124,9 +124,9 @@
 							</li>
 							<li>
 								{% if app.user %}
-									{% if app.user.patient %}
+									{% if app.user.patient and app.user.patient.id %}
 										<a href="{{ path('app_patient_edit', {'id': app.user.patient.id}) }}" class="th-btn">{{ app.user.firstname }}</a>
-									{% elseif app.user.secretary %}
+									{% elseif app.user.secretary and app.user.secretary.id %}
 										<a href="{{ path('app_secretary_edit', {'id': app.user.secretary.id}) }}" class="th-btn">{{ app.user.firstname }}</a>
 									{% elseif app.user.doctor and app.user.doctor.id %}
 										<a href="{{ path('app_doctor_edit', {'id': app.user.doctor.id}) }}" class="th-btn">{{ app.user.firstname }}</a>
@@ -198,9 +198,9 @@
 									<div class="header-button">
 
 										{% if app.user %}
-											{% if app.user.patient %}
+											{% if app.user.patient and app.user.patient.id %}
 												<a href="{{ path('app_patient_edit', {'id': app.user.patient.id}) }}" class="th-btn">{{ app.user.firstname }}</a>
-											{% elseif app.user.secretary %}
+											{% elseif app.user.secretary  and app.user.secretary.id %}
 												<a href="{{ path('app_secretary_edit', {'id': app.user.secretary.id}) }}" class="th-btn">{{ app.user.firstname }}</a>
 											{% elseif app.user.doctor and app.user.doctor.id %}
 												<a href="{{ path('app_doctor_edit', {'id': app.user.doctor.id}) }}" class="th-btn">{{ app.user.firstname }}</a>

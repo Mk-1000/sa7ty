@@ -41,7 +41,7 @@ class RegistrationFormType extends AbstractType
                     'Male' => 1,
                     'Female' => 0,
                 ],
-                'expanded' => true, // Use radio buttons
+                'expanded' => false, // Change to false to render as select box
                 'required' => true,
             ])
 
@@ -58,7 +58,8 @@ class RegistrationFormType extends AbstractType
                     'Secretary' => 'ROLE_SECRETARY',
                     'Doctor' => 'ROLE_DOCTOR',
                 ],
-                'expanded' => true, // Allow selecting multiple roles
+                'multiple' => false, // Change to false to allow selecting only one role
+                'expanded' => false, // This is redundant as by default expanded is false
                 'required' => true,
             ])
             //End
