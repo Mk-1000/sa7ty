@@ -27,8 +27,11 @@ List the key features of your project.
 
 ## Installation
 
-- composer require symfony/security-bundle
-- symfony console d:d:c
-- symfony console make:migration
-- symfony console d:m:m
-- symfony server:start
+- `composer require symfony/security-bundle`
+- `symfony console doctrine:database:create`
+- `composer require --dev orm-fixtures`
+- `composer require fakerphp/faker --dev`
+- `symfony console doctrine:fixtures:load`
+- `symfony console make:migration`
+- `symfony console doctrine:migrations:migrate`
+- `symfony server:start`

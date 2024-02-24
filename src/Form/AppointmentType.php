@@ -2,13 +2,13 @@
 
 namespace App\Form;
 
+use App\Entity\Doctor;
+use App\Entity\Patient;
 use App\Entity\Appointment;
 use App\Entity\Consultation;
-use App\Entity\Patient;
-use App\Entity\Secretary;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AppointmentType extends AbstractType
@@ -24,8 +24,8 @@ class AppointmentType extends AbstractType
                 'class' => Patient::class,
 'choice_label' => 'id',
             ])
-            ->add('secretary', EntityType::class, [
-                'class' => Secretary::class,
+            ->add('doctor', EntityType::class, [
+                'class' => Doctor::class,
 'choice_label' => 'id',
             ])
             ->add('Consultation', EntityType::class, [
