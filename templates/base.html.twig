@@ -111,10 +111,20 @@
 
 									</li>
 								{% elseif app.user.doctor %}
-									<li>
-										<a href="#">Cabinet</a>
-
-									</li>
+									<li class="menu-item-has-children">
+														<a href="#">Cabinet</a>
+														<ul class="sub-menu">
+															<li>
+																<a href="#">les rendez-vous</a>
+															</li>
+															<li>
+																<a href="#">liste des patients</a>
+															</li>
+																														<li>
+																<a href="#">liste des secrétaires</a>
+															</li>
+														</ul>
+													</li>
 								{% endif %}
 							{% endif %}
 
@@ -181,10 +191,21 @@
 
 													</li>
 												{% elseif app.user.doctor %}
-													<li>
+													<li class="menu-item-has-children">
 														<a href="#">Cabinet</a>
-
+														<ul class="sub-menu">
+															<li>
+																<a href="#">les rendez-vous</a>
+															</li>
+															<li>
+																<a href="#">liste des patients</a>
+															</li>
+																														<li>
+																<a href="#">liste des secrétaires</a>
+															</li>
+														</ul>
 													</li>
+												
 												{% endif %}
 											{% endif %}
 											<li>
