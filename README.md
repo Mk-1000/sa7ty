@@ -31,7 +31,7 @@ List the key features of your project.
 - `symfony console doctrine:database:create`
 - `composer require --dev orm-fixtures`
 - `composer require fakerphp/faker --dev`
-- `symfony console doctrine:fixtures:load`
 - `symfony console make:migration`
 - `symfony console doctrine:migrations:migrate`
+- `symfony console doctrine:fixtures:load`
 - `symfony server:start`
