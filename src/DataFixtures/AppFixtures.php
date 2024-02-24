@@ -9,21 +9,32 @@ use App\Entity\Patient;
 use App\Entity\Secretary;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+    private UserPasswordHasherInterface $passwordHasher;
+
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
+    {
+        $this->passwordHasher = $passwordHasher;
+    }
     public function load(ObjectManager $manager): void
     {
         // Instanciate Faker
         $faker = Factory::create('fr_FR');
 
         // Create Users and associate with entities
-        for ($i = 0; $i < 1000; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             // Create User
             $user = new User();
             $user->setEmail($faker->email);
-            $user->setPassword('password'); // Set a default password, you might want to use a better approach for passwords
-            $user->setFirstName($faker->firstName);
+            $user->setPassword(
+                $this->passwordHasher->hashPassword(
+                    $user,
+                    'password' // Set a default password, you might want to use a better approach for passwords
+                )
+            );            $user->setFirstName($faker->firstName);
             $user->setLastName($faker->lastName);
             $user->setPhone($faker->phoneNumber);
             $user->setGender($faker->boolean);
@@ -31,7 +42,7 @@ class AppFixtures extends Fixture
             $user->setCreationDate(time());
 
             // Randomly associate user with entities
-            $randomEntity = $faker->randomElement(['Doctor', 'Patient', 'Secretary']);
+            $randomEntity = $faker->randomElement(['Doctor', 'Patient'/*, 'Secretary'*/]);
             switch ($randomEntity) {
                 case 'Doctor':
                     $doctor = new Doctor();
