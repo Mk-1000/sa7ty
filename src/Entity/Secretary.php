@@ -18,15 +18,15 @@ class Secretary
     #[ORM\Column(nullable: true)]
     private ?int $yearExp = null;
 
-    #[ORM\OneToMany(targetEntity: Appointment::class, mappedBy: 'secretary')]
-    private Collection $Appointments;
-
     #[ORM\OneToOne(mappedBy: 'Secretary', cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
+    #[ORM\ManyToMany(targetEntity: Doctor::class, mappedBy: 'Secretarys')]
+    private Collection $doctors;
+
     public function __construct()
     {
-        $this->Appointments = new ArrayCollection();
+        $this->doctors = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -42,36 +42,6 @@ class Secretary
     public function setYearExp(?int $yearExp): static
     {
         $this->yearExp = $yearExp;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Appointment>
-     */
-    public function getAppointments(): Collection
-    {
-        return $this->Appointments;
-    }
-
-    public function addAppointment(Appointment $appointment): static
-    {
-        if (!$this->Appointments->contains($appointment)) {
-            $this->Appointments->add($appointment);
-            $appointment->setSecretary($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAppointment(Appointment $appointment): static
-    {
-        if ($this->Appointments->removeElement($appointment)) {
-            // set the owning side to null (unless already changed)
-            if ($appointment->getSecretary() === $this) {
-                $appointment->setSecretary(null);
-            }
-        }
 
         return $this;
     }
@@ -94,6 +64,33 @@ class Secretary
         }
 
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Doctor>
+     */
+    public function getDoctors(): Collection
+    {
+        return $this->doctors;
+    }
+
+    public function addDoctor(Doctor $doctor): static
+    {
+        if (!$this->doctors->contains($doctor)) {
+            $this->doctors->add($doctor);
+            $doctor->addSecretary($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDoctor(Doctor $doctor): static
+    {
+        if ($this->doctors->removeElement($doctor)) {
+            $doctor->removeSecretary($this);
+        }
 
         return $this;
     }

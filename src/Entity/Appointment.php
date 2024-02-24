@@ -29,11 +29,12 @@ class Appointment
     #[ORM\JoinColumn(nullable: false)]
     private ?Patient $patient = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Appointments')]
-    private ?Secretary $secretary = null;
-
     #[ORM\OneToOne(inversedBy: 'appointment', cascade: ['persist', 'remove'])]
     private ?Consultation $Consultation = null;
+
+    #[ORM\ManyToOne(inversedBy: 'appointments')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Doctor $Doctor = null;
 
     public function getId(): ?int
     {
@@ -100,18 +101,6 @@ class Appointment
         return $this;
     }
 
-    public function getSecretary(): ?Secretary
-    {
-        return $this->secretary;
-    }
-
-    public function setSecretary(?Secretary $secretary): static
-    {
-        $this->secretary = $secretary;
-
-        return $this;
-    }
-
     public function getConsultation(): ?Consultation
     {
         return $this->Consultation;
@@ -120,6 +109,18 @@ class Appointment
     public function setConsultation(?Consultation $Consultation): static
     {
         $this->Consultation = $Consultation;
+
+        return $this;
+    }
+
+    public function getDoctor(): ?Doctor
+    {
+        return $this->Doctor;
+    }
+
+    public function setDoctor(?Doctor $Doctor): static
+    {
+        $this->Doctor = $Doctor;
 
         return $this;
     }
