@@ -80,22 +80,22 @@
             font-size: large;
             font-weight: bolder;
         }
-        #desc {
+        .desc {
         flex: 1;
         }
-        #desc h2{
+        .desc h2{
             color:#007bff;
             font:lighter ;
         }
-        #calond{
+        .calond{
             flex: 2;
             width: fit-content;
         }
-        #table{  
+        .table{  
             display: flex;
             width: fit-content;
         }
-        #table button{
+        .table button{
             width: 20px;
             height: 30px;
             padding-top: 0px;
@@ -107,13 +107,13 @@
             background-color: transparent;
             border-radius: 50%;
         }
-        #table button::content{
+        .table button::content{
             padding-top: 10px;
         }
-        #table button:hover{
+        .table button:hover{
             background-color:#e7f4fd;
         }
-        #visit{
+        .visit{
             border: none;
             border-radius: 10px;
             background-color: #107aca;
@@ -122,20 +122,20 @@
             width: 200px;
             font-weight: bolder;
         }
-        #visit:hover{
+        .visit:hover{
             background-color: #045fae;
             cursor: pointer;
         }
-        a#path{
+        a.path{
             color: #107aca;
             font-weight: bolder;
             text-decoration: none;
         }
-        a#path:hover{
+        a.path:hover{
             color: #045fae;
             text-decoration:underline;
         }
-        p#secteur{
+        p.secteur{
             font-weight: lighter;
             color: gray;
         }
@@ -182,18 +182,18 @@
 
   <div class="card">
     <div class="content">
-      <div id="desc{{ x }}">
+      <div id="desc{{ x }}" class="desc">
         <h2> Dr Marie-Eve CAUCHON-RAULT</h2>
         <h4>Médecin généraliste</h4>
         <p>Consultation vidéo disponible</p>
-        <button id="visit{{ x }}">PRENDRE RENDEZ-VOUS</button>
+        <button id="visit{{ x }}" class="visit">PRENDRE RENDEZ-VOUS</button>
       </div>
-      <div id="calond{{ x }}">
-        <div id="table{{ x }}">
+      <div id="calond{{ x }}" class="calond">
+        <div id="table{{ x }}" class="table">
           <button class="nav-btn prevWeekBtn" data-card="{{ x }}">&lt;</button>
           <table>
             <thead>
-              <tr id="tableHeaders{{ x }}">
+              <tr id="tableHeaders{{ x }}" class="tableHeaders">
                 <!-- Table headers will be populated dynamically -->
               </tr>
             </thead>
@@ -242,7 +242,7 @@
           </table>
           <button class="nav-btn nextWeekBtn" data-card="{{ x }}">&gt;</button>
         </div>
-        <div id="more{{ x }}">
+        <div id="more {{ x }}" class="more">
           <button class="read-more-btn" data-card="{{ x }}">VOIR PLUS D'HORAIRES</button>
         </div>
       </div>
@@ -261,7 +261,6 @@
     const tableHeaders = document.querySelectorAll('[id^="tableHeaders"]');
 
     let currentWeeks = Array.from({ length:  10 }, (_, index) => index); // Assuming you have  10 cards
-
     readMoreBtns.forEach((readMoreBtn) => {
       const cardIndex = readMoreBtn.getAttribute('data-card');
       readMoreBtn.addEventListener('click', function () {
