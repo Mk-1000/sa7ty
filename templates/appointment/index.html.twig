@@ -177,28 +177,28 @@
     </table>
 
     <a href="{{ path('app_appointment_new') }}">Create new</a> #}
+    
+{% for x in range(1,10) %}
 
-     {% for x in range(1,10) %}
-    <div class="card">
-        <div class="content">
-            <div id="desc">
-                <h2> Dr Marie-Eve CAUCHON-RAULT</h2>
-                <h4>Médecin généraliste</h4>
-                <p>Consultation vidéo disponible</p>
-                <button id="visit">PRENDRE RENDEZ-VOUS</button>
-            </div>
-
-            <div id="calond">
-                <div id="table">
-                    <button class="nav-btn" class="prevWeekBtn">&lt;</button>
-                    <table>
-                        <thead>
-                            <tr id="tableHeaders{{ x }}">
-                                <!-- Table headers will be populated dynamically -->
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
+  <div class="card">
+    <div class="content">
+      <div id="desc{{ x }}">
+        <h2> Dr Marie-Eve CAUCHON-RAULT</h2>
+        <h4>Médecin généraliste</h4>
+        <p>Consultation vidéo disponible</p>
+        <button id="visit{{ x }}">PRENDRE RENDEZ-VOUS</button>
+      </div>
+      <div id="calond{{ x }}">
+        <div id="table{{ x }}">
+          <button class="nav-btn prevWeekBtn" data-card="{{ x }}">&lt;</button>
+          <table>
+            <thead>
+              <tr id="tableHeaders{{ x }}">
+                <!-- Table headers will be populated dynamically -->
+              </tr>
+            </thead>
+            <tbody>
+               <tr>
                                 <td>07:30</td>
                                 <td>07:30</td>
                                 <td>07:30</td>
@@ -238,82 +238,87 @@
                                 <td>09:30</td>
                                 <td>09:30</td>
                             </tr>
-                        </tbody>
-                    </table>
-                    <button class="nav-btn" class="nextWeekBtn">&gt;</button>
-                </div>
-                <div id="more">
-                    <button class="read-more-btn">VOIR PLUS D'HORAIRES</button>
-                </div>
-            </div>
+            </tbody>
+          </table>
+          <button class="nav-btn nextWeekBtn" data-card="{{ x }}">&gt;</button>
         </div>
+        <div id="more{{ x }}">
+          <button class="read-more-btn" data-card="{{ x }}">VOIR PLUS D'HORAIRES</button>
+        </div>
+      </div>
     </div>
+  </div>
+
 {% endfor %}
+
 {% endblock %}
 {% block addJavascript %}
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const readMoreBtns = document.querySelectorAll('.read-more-btn');
-            const extraRows = document.querySelectorAll('.extra-rows');
-            const currentDate = new Date();
-            const currentDayOfWeek = currentDate.getDay(); // 0 for Sunday, 1 for Monday, etc.
-            const startDateOfWeek = new Date(currentDate);
-            startDateOfWeek.setDate(startDateOfWeek.getDate() - currentDayOfWeek); // Adjust to start of the week
+   <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const readMoreBtns = document.querySelectorAll('.read-more-btn');
+    const prevWeekBtns = document.querySelectorAll('.prevWeekBtn');
+    const nextWeekBtns = document.querySelectorAll('.nextWeekBtn');
+    const tableHeaders = document.querySelectorAll('[id^="tableHeaders"]');
 
-            readMoreBtns.forEach((readMoreBtn, index) => {
-                readMoreBtn.addEventListener('click', function () {
-                    extraRows[index].style.display = extraRows[index].style.display === 'none' ? 'table-row' : 'none';
-                });
-            });
+    let currentWeeks = Array.from({ length:  10 }, (_, index) => index); // Assuming you have  10 cards
 
-            const prevWeekBtns = document.querySelectorAll('.prevWeekBtn');
-            const nextWeekBtns = document.querySelectorAll('.nextWeekBtn');
-            const tableHeaders = document.querySelectorAll('[id^="tableHeaders"]');
-            let currentWeeks = Array.from({ length: 10 }, (_, index) => index); // Assuming you have 10 cards
-
-            prevWeekBtns.forEach((prevWeekBtn, index) => {
-                prevWeekBtn.addEventListener('click', function () {
-                    if (currentWeeks[index] >= 1) {
-                        currentWeeks[index]--;
-                        tableHeaders[index].innerHTML = '';
-                        populate(index, currentWeeks[index]);
-                    }
-                });
-            });
-
-            nextWeekBtns.forEach((nextWeekBtn, index) => {
-                nextWeekBtn.addEventListener('click', function () {
-                    currentWeeks[index]++;
-                    tableHeaders[index].innerHTML = '';
-                    populate(index, currentWeeks[index]);
-                });
-            });
-
-            function populate(index, currentWeek) {
-                const daysOfWeek = ['DIM', 'LUN', 'MARD', 'MERC', 'JEUD', 'VEND', 'SAM'];
-                const headerId = `tableHeaders${index + 1}`;
-
-                for (let i = 0; i < 6; i++) {
-                    const headerDate = new Date(startDateOfWeek.getTime());
-                    headerDate.setDate(headerDate.getDate() + (7 * currentWeek) + i);
-                    const dayOfWeek = daysOfWeek[headerDate.getDay()];
-                    const dayOfMonth = headerDate.getDate();
-                    const month = headerDate.toLocaleDateString('fr-FR', { month: 'short' });
-                    const headerText = `${dayOfWeek} <br> ${dayOfMonth} ${month}`;
-                    const th = document.createElement('td');
-                    th.innerHTML = headerText;
-                    if (i === 0) {
-                        th.classList.add('current-week');
-                    }
-                    document.getElementById(headerId).appendChild(th);
-                }
-            }
-
-            // Initial population of the tables
-            tableHeaders.forEach((_, index) => {
-                populate(index, currentWeeks[index]);
-            });
+    readMoreBtns.forEach((readMoreBtn) => {
+      const cardIndex = readMoreBtn.getAttribute('data-card');
+      readMoreBtn.addEventListener('click', function () {
+        const extraRows = document.querySelectorAll(`#calond${cardIndex} .extra-rows`);
+        extraRows.forEach((extraRow) => {
+          extraRow.style.display = extraRow.style.display === 'none' ? 'table-row' : 'none';
         });
-    </script>
+      });
+    });
+
+    prevWeekBtns.forEach((prevWeekBtn) => {
+      const cardIndex = prevWeekBtn.getAttribute('data-card');
+      prevWeekBtn.addEventListener('click', function () {
+        if (currentWeeks[cardIndex] >=  1) {
+          currentWeeks[cardIndex]--;
+          document.getElementById(`tableHeaders${cardIndex}`).innerHTML = '';
+          populate(cardIndex, currentWeeks[cardIndex]);
+        }
+      });
+    });
+
+    nextWeekBtns.forEach((nextWeekBtn) => {
+      const cardIndex = nextWeekBtn.getAttribute('data-card');
+      nextWeekBtn.addEventListener('click', function () {
+        currentWeeks[cardIndex]++;
+        document.getElementById(`tableHeaders${cardIndex}`).innerHTML = '';
+        populate(cardIndex, currentWeeks[cardIndex]);
+      });
+    });
+
+    function populate(cardIndex, currentWeek) {
+      const daysOfWeek = ['DIM', 'LUN', 'MARD', 'MERC', 'JEUD', 'VEND', 'SAM'];
+      const headerId = `tableHeaders${cardIndex}`;
+      const startDateOfWeek = new Date();
+      startDateOfWeek.setDate(startDateOfWeek.getDate() - startDateOfWeek.getDay()); // Adjust to start of the week
+
+      for (let i =  0; i <  6; i++) {
+        const headerDate = new Date(startDateOfWeek.getTime());
+        headerDate.setDate(headerDate.getDate() + (7 * currentWeek) + i);
+        const dayOfWeek = daysOfWeek[headerDate.getDay()];
+        const dayOfMonth = headerDate.getDate();
+        const month = headerDate.toLocaleDateString('fr-FR', { month: 'short' });
+        const headerText = `${dayOfWeek} <br> ${dayOfMonth} ${month}`;
+        const th = document.createElement('td');
+        th.innerHTML = headerText;
+        if (i ===  0) {
+          th.classList.add('current-week');
+        }
+        document.getElementById(headerId).appendChild(th);
+      }
+    }
+
+    // Initial population of the tables
+    tableHeaders.forEach((_, index) => {
+      populate(index, currentWeeks[index]);
+    });
+  });
+</script>
 
 {% endblock %}

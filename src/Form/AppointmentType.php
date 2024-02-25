@@ -10,6 +10,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class AppointmentType extends AbstractType
 {
@@ -18,7 +20,14 @@ class AppointmentType extends AbstractType
         $builder
             ->add('date')
             ->add('hour')
-            ->add('patientStatus')
+            ->add('patientStatus',ChoiceType::class, [
+                'choices' => [
+                    'Urgent' => 1,
+                    'Pas urgent' => 0,
+                ],
+                'expanded' => false, // Change to false to render as select box
+                'required' => true,
+            ])
             ->add('progress')
             ->add('patient', EntityType::class, [
                 'class' => Patient::class,
