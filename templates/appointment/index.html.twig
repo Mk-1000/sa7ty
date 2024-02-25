@@ -259,7 +259,6 @@
     const prevWeekBtns = document.querySelectorAll('.prevWeekBtn');
     const nextWeekBtns = document.querySelectorAll('.nextWeekBtn');
     const tableHeaders = document.querySelectorAll('[id^="tableHeaders"]');
-
     let currentWeeks = Array.from({ length:  10 }, (_, index) => index); // Assuming you have  10 cards
     readMoreBtns.forEach((readMoreBtn) => {
       const cardIndex = readMoreBtn.getAttribute('data-card');
@@ -271,6 +270,37 @@
       });
     });
 
+  function populateDates() {
+      tableHeaders.forEach((header, index) => {
+        const cardIndex = 0;
+        const daysOfWeek = ['DIM', 'LUN', 'MARD', 'MERC', 'JEUD', 'VEND', 'SAM'];
+        const headerId = `tableHeaders${cardIndex}`;
+        const startDateOfWeek = new Date();
+        startDateOfWeek.setDate(startDateOfWeek.getDate() - startDateOfWeek.getDay()); // Adjust to start of the week
+        header.innerHTML='';
+        for (let i = 0; i < 6; i++) {
+          const headerDate = new Date(startDateOfWeek.getTime());
+          headerDate.setDate(headerDate.getDate() + (7 * currentWeeks[cardIndex]) + i);
+          const dayOfWeek = daysOfWeek[headerDate.getDay()];
+          const dayOfMonth = headerDate.getDate();
+          const month = headerDate.toLocaleDateString('fr-FR', { month: 'short' });
+          const headerText = `${dayOfWeek} <br> ${dayOfMonth} ${month}`;
+          const th = document.createElement('td');
+          th.innerHTML = headerText;
+          if (i === 0) {
+            th.classList.add('current-week');
+          }
+          //header.innerHTML=''; // Clear existing content
+          header.appendChild(th);
+        }
+        
+      });
+    }
+
+    // Initial population of the tables
+    populateDates();
+
+    
     prevWeekBtns.forEach((prevWeekBtn) => {
       const cardIndex = prevWeekBtn.getAttribute('data-card');
       prevWeekBtn.addEventListener('click', function () {
