@@ -128,7 +128,24 @@
 															</li>
 														</ul>
 													</li>
+								{% else %}
+									<li class="menu-item-has-children">
+														<a href="#">Users</a>
+														<ul class="sub-menu">
+															<li>
+																<a href="#">liste des docteurs</a>
+															</li>
+															<li>
+																<a href="#">liste des patients</a>
+															</li>
+																														<li>
+																<a href="#">liste des secrétaires</a>
+															</li>
+														</ul>
+													</li>
 								{% endif %}
+
+													
 							{% endif %}
 
 							<li>
@@ -207,6 +224,19 @@
 																<a href="#">liste des secrétaires</a>
 															</li>
 														</ul>
+													</li>
+													{% else %}
+													<li>
+														<a href="{{ path('admin_doctor_index')}}">docteurs</a>
+
+													</li>
+													<li>
+														<a href="{{ path('admin_patient_index')}}">patients</a>
+
+													</li>
+													<li>
+														<a href="{{ path('admin_secretary_index')}}">secrétaires</a>
+
 													</li>
 												
 												{% endif %}
