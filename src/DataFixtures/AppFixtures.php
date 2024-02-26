@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
+use App\Entity\Blog;
 use App\Entity\User;
 use App\Entity\Doctor;
 use App\Entity\Patient;
@@ -56,6 +57,30 @@ class AppFixtures extends Fixture
                     $user->setRoles(['ROLE_DOCTOR']);
                     $doctor->setUser($user);
                     $manager->persist($doctor);
+
+                    for ($i = 0; $i < 7; $i++) {
+                        $blog = new Blog();
+                        $blog->setDoctor($doctor); // Assuming $doctor is defined and holds a valid value
+                        $timestamp = time();
+                        $blog->setCreationDate($timestamp);
+                    
+                        // Generate random title options:
+                        $titleOptions = [
+                            $faker->sentence(3, true), // Sentence with 3 words
+                            $faker->words(5, true),      // 5 random words (no punctuation)
+                            $faker->catchPhrase,        // Catchy phrase
+                            $faker->realText(20, 2),     // Random paragraph with 20 words, minimum 2 sentences
+                        ];
+                    
+                        // Pick a random option from the array:
+                        $randomTitle = $titleOptions[array_rand($titleOptions)];
+                    
+                        $blog->setTitle($randomTitle);
+                        $blog->setDetails($faker->paragraph); // Set the details using faker
+                    
+                        $manager->persist($blog); // Assuming $manager is an object with a persist() method
+                    }
+
                     break;
                 case 'Patient':
                     $patient = new Patient();
