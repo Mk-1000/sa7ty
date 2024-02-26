@@ -3,24 +3,24 @@
 {% block title %}Patient{% endblock %}
 
 {% block body %}
-    <h1>Patient</h1>
-
-    <table class="table">
+<div class="space">
+    <table class="cart_table woocommerce-cart-form">
+        <thead>
+            <tr>
+                <th class="cart-col-Nom">Id</th>
+                <th class="cart-col-Region">Region</th>
+            </tr>
+        </thead>
         <tbody>
             <tr>
-                <th>Id</th>
                 <td>{{ patient.id }}</td>
-            </tr>
-            <tr>
-                <th>Region</th>
                 <td>{{ patient.region }}</td>
             </tr>
         </tbody>
     </table>
+</div>
 
-    <a href="{{ path('app_patient_index') }}">back to list</a>
-
-    <a href="{{ path('app_patient_edit', {'id': patient.id}) }}">edit</a>
-
-    {{ include('patient/_delete_form.html.twig') }}
+<a href="{{ path('app_patient_index') }}">back to list</a>
+<a href="{{ path('app_patient_edit', {'id': patient.id}) }}">edit</a>
+{{ include('patient/_delete_form.html.twig') }}
 {% endblock %}
