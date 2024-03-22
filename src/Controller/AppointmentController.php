@@ -17,8 +17,25 @@ class AppointmentController extends AbstractController
     #[Route('/', name: 'app_appointment_index', methods: ['GET'])]
     public function index(AppointmentRepository $appointmentRepository): Response
     {
+        $appointments = $appointmentRepository->findAll();
+        dump($appointments); // Debugging: Output appointments to check data
+    
         return $this->render('appointment/index.html.twig', [
-            'appointments' => $appointmentRepository->findAll(),
+            'appointments' => $appointments,
+        ]);
+    }
+    
+
+    #[Route('/doctor/{doctorId}', name: 'app_appointment_doctor', methods: ['GET'])]
+    public function doctorAppointments(int $doctorId, AppointmentRepository $appointmentRepository): Response
+    {
+        // Fetch appointments for a specific doctor
+        $appointments = $appointmentRepository->findByDoctorId($doctorId);
+        
+        dump($appointments); // Debugging: Output appointments to check data
+        
+        return $this->render('appointment/doctor.html.twig', [
+            'appointments' => $appointments,
         ]);
     }
 

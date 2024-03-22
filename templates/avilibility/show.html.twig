@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Avilibility{% endblock %}
+
+{% block body %}
+    <h1>Avilibility</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ avilibility.id }}</td>
+            </tr>
+            <tr>
+                <th>Duration</th>
+                <td>{{ avilibility.duration }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_avilibility_index') }}">back to list</a>
+
+    <a href="{{ path('app_avilibility_edit', {'id': avilibility.id}) }}">edit</a>
+
+    {{ include('avilibility/_delete_form.html.twig') }}
+{% endblock %}

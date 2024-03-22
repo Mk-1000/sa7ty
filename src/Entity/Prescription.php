@@ -19,8 +19,10 @@ class Prescription
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
+    #[ORM\ManyToOne(inversedBy: 'prescriptions')]
+    private ?Appointment $appointment = null;
+
     #[ORM\OneToOne(mappedBy: 'Prescription', cascade: ['persist', 'remove'])]
-    private ?Consultation $consultation = null;
 
     public function getId(): ?int
     {
@@ -51,25 +53,16 @@ class Prescription
         return $this;
     }
 
-    public function getConsultation(): ?Consultation
+    public function getAppointment(): ?Appointment
     {
-        return $this->consultation;
+        return $this->appointment;
     }
 
-    public function setConsultation(?Consultation $consultation): static
+    public function setAppointment(?Appointment $appointment): static
     {
-        // unset the owning side of the relation if necessary
-        if ($consultation === null && $this->consultation !== null) {
-            $this->consultation->setPrescription(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($consultation !== null && $consultation->getPrescription() !== $this) {
-            $consultation->setPrescription($this);
-        }
-
-        $this->consultation = $consultation;
+        $this->appointment = $appointment;
 
         return $this;
     }
+
 }

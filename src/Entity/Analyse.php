@@ -20,8 +20,11 @@ class Analyse
     #[ORM\Column(type: Types::BLOB, nullable: true)]
     private $result = null;
 
+    #[ORM\ManyToOne(inversedBy: 'analyses')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Appointment $appointment = null;
+
     #[ORM\ManyToOne(inversedBy: 'Analyses')]
-    private ?Consultation $consultation = null;
 
     public function getId(): ?int
     {
@@ -52,15 +55,16 @@ class Analyse
         return $this;
     }
 
-    public function getConsultation(): ?Consultation
+    public function getAppointment(): ?Appointment
     {
-        return $this->consultation;
+        return $this->appointment;
     }
 
-    public function setConsultation(?Consultation $consultation): static
+    public function setAppointment(?Appointment $appointment): static
     {
-        $this->consultation = $consultation;
+        $this->appointment = $appointment;
 
         return $this;
     }
+
 }

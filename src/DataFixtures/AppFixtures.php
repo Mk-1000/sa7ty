@@ -3,7 +3,9 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
+use App\Entity\Day;
 use App\Entity\Blog;
+use App\Entity\Hour;
 use App\Entity\User;
 use App\Entity\Doctor;
 use App\Entity\Patient;
@@ -122,6 +124,33 @@ class AppFixtures extends Fixture
                     break;
             }
             $manager->persist($user);
+        }
+
+        $currentYear = (int) date('Y');
+        $daysInYear = (int) date('z', mktime(0, 0, 0, 12, 31, $currentYear)) + 1;
+
+        for ($i = 1; $i <= $daysInYear; $i++) {
+            $day = new Day();
+            $day->setDay($i);
+            $manager->persist($day);
+        }
+
+
+        // Loop through hours
+        for ($i = 0; $i <= 23; $i++) {
+            // Loop through minutes
+            for ($j = 0; $j <= 59; $j++) {
+                // Create new Hour object
+                $hour = new Hour();
+                
+                // Format hour and minute strings
+                $hourStr = sprintf("%02d:%02d", $i, $j);
+                
+                // Set start time for the hour object
+                $hour->setStartTime($hourStr);
+                
+                $manager->persist($hour);
+            }
         }
 
         // Flush objects

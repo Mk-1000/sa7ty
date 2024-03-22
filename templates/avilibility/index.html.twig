@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Avilibility index{% endblock %}
+
+{% block body %}
+    <h1>Avilibility index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Duration</th>
+                <th>Selected Days</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for avilibility in avilibilities %}
+            <tr>
+                <td>{{ avilibility.id }}</td>
+                <td>{{ avilibility.duration }}</td>
+                <td>
+                    {% for day in avilibility.Days %}
+                        {{ day.day }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    <a href="{{ path('app_avilibility_show', {'id': avilibility.id}) }}">Show</a>
+                    <a href="{{ path('app_avilibility_edit', {'id': avilibility.id}) }}">Edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">No records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_avilibility_new') }}">Create new</a>
+{% endblock %}
