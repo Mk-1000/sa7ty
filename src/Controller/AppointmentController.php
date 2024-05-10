@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Appointment;
+use App\Entity\Doctor;
 use App\Form\AppointmentType;
 use App\Repository\AppointmentRepository;
+use App\Repository\DoctorRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,28 +16,20 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/appointment')]
 class AppointmentController extends AbstractController
 {
-    #[Route('/', name: 'app_appointment_index', methods: ['GET'])]
-    public function index(AppointmentRepository $appointmentRepository): Response
+    #[Route('/booking', name: 'app_appointment_booking', methods: ['GET'])]
+    public function appointmentBooking(AppointmentRepository $appointmentRepository,DoctorRepository $doctorRepository ): Response
     {
-        $appointments = $appointmentRepository->findAll();
-        dump($appointments); // Debugging: Output appointments to check data
-    
-        return $this->render('appointment/index.html.twig', [
-            'appointments' => $appointments,
+        return $this->render('appointment/app_appointment_booking.twig', [
+            'appointments' => $appointmentRepository->findAll(),
+            'doctors' => $doctorRepository->findAll(),
         ]);
     }
-    
 
-    #[Route('/doctor/{doctorId}', name: 'app_appointment_doctor', methods: ['GET'])]
-    public function doctorAppointments(int $doctorId, AppointmentRepository $appointmentRepository): Response
+    #[Route('/', name: 'app_appointment_index', methods: ['GET'])]
+    public function index(AppointmentRepository $appointmentRepository,DoctorRepository $doctorRepository ): Response
     {
-        // Fetch appointments for a specific doctor
-        $appointments = $appointmentRepository->findByDoctorId($doctorId);
-        
-        dump($appointments); // Debugging: Output appointments to check data
-        
-        return $this->render('appointment/doctor.html.twig', [
-            'appointments' => $appointments,
+        return $this->render('appointment/index.html.twig', [
+            'appointments' => $appointmentRepository->findAll(),'doctors' => $doctorRepository->findAll(),
         ]);
     }
 
@@ -95,4 +89,36 @@ class AppointmentController extends AbstractController
 
         return $this->redirectToRoute('app_appointment_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/new_booking/{doctorId}/{dateTimeStamp}/{startAt}', name: 'app_appointment_book_now', methods: ['GET', 'POST'])]
+    public function bookNow(int $doctorId, int $dateTimeStamp, int $startAt, Request $request, EntityManagerInterface $entityManager, DoctorRepository $doctorRepository): Response
+    {
+        // Check if the logged-in user has the 'Patient' role
+        if (in_array('ROLE_PATIENT', $this->getUser()->getRoles())) {
+            $doctor = $doctorRepository->find($doctorId);
+            if (!$doctor) {
+                throw $this->createNotFoundException('No doctor found for id ' . $doctorId);
+            }
+    
+            // Create a new Appointment entity
+            $appointment = new Appointment();
+            $appointment->setDoctor($doctor);
+            $appointment->setPatient($this->getUser()->getPatient());
+            $appointment->setDate($startAt); // Set date from converted timestamp
+            $appointment->setHour($dateTimeStamp); // Set hour from converted timestamp
+            $appointment->setProgress("RESERVED");
+    
+            // Persist the appointment
+            $entityManager->persist($appointment);
+            $entityManager->flush();
+    
+            // Redirect to the appointments index page, or another suitable confirmation page
+            return $this->redirectToRoute('app_appointment_booking', [], Response::HTTP_SEE_OTHER);
+        }
+    
+        // If the user is not a patient or not logged in, redirect to a login page or deny access
+        return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
+    }
+    
+    
 }

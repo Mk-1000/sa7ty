@@ -1,21 +1,51 @@
-{# templates/appointment/index.html.twig #}
-
 {% extends 'base.html.twig' %}
 
-{% block body %}
-    <h1>Appointments</h1>
+{% block title %}Appointment Index{% endblock %}
 
-{% if appointments is not empty %}
-    <ul>
-        {% for appointment in appointments %}
-            <li>{{ appointment.id }} - {{ appointment.progress }}</li>
-            {# Adjust the properties you want to display accordingly #}
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No appointments found.</p>
-{% endif %}
-
-
-    <a href="{{ path('app_appointment_new') }}">New Appointment</a>
+{% block addstylesheets %}
+    <!-- Your CSS styles -->
 {% endblock %}
+
+{% block body %}
+    <div class="overflow-hidden space">
+        <div class="container">
+
+            <table>
+                <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>Date</td>
+                        <td>Hour</td>
+                        <td>Status</td>
+                        <td>Progress</td>
+                        <td>Actions</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if appointments is not empty %}
+                        {% for appointment in appointments %}
+                            {% if app.user and app.user.doctor and appointment.doctor.id == app.user.doctor.id %}
+                                <tr>
+                                    <td>{{ appointment.id }}</td>
+                                    <td>{{ appointment.date }}</td>
+                                    <td>{{ appointment.hour }}</td>
+                                    <td>{{ appointment.patientStatus ? 'Yes' : 'No' }}</td>
+                                    <td>{{ appointment.progress }}</td>
+                                    <td>
+                                        <a href="{{ path('app_appointment_show', {'id': appointment.id}) }}">show</a>
+                                        <a href="{{ path('app_appointment_edit', {'id': appointment.id}) }}">edit</a>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6">No records found</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+

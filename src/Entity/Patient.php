@@ -21,12 +21,16 @@ class Patient
     #[ORM\OneToMany(targetEntity: Appointment::class, mappedBy: 'patient', orphanRemoval: true)]
     private Collection $Appointments;
 
+    #[ORM\OneToMany(targetEntity: Consultation::class, mappedBy: 'patient')]
+    private Collection $Consultations;
+
     #[ORM\OneToOne(mappedBy: 'Patient', cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
     public function __construct()
     {
         $this->Appointments = new ArrayCollection();
+        $this->Consultations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -70,6 +74,36 @@ class Patient
             // set the owning side to null (unless already changed)
             if ($appointment->getPatient() === $this) {
                 $appointment->setPatient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Consultation>
+     */
+    public function getConsultations(): Collection
+    {
+        return $this->Consultations;
+    }
+
+    public function addConsultation(Consultation $consultation): static
+    {
+        if (!$this->Consultations->contains($consultation)) {
+            $this->Consultations->add($consultation);
+            $consultation->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConsultation(Consultation $consultation): static
+    {
+        if ($this->Consultations->removeElement($consultation)) {
+            // set the owning side to null (unless already changed)
+            if ($consultation->getPatient() === $this) {
+                $consultation->setPatient(null);
             }
         }
 

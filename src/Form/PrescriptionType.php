@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Consultation;
 use App\Entity\Prescription;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -15,6 +16,10 @@ class PrescriptionType extends AbstractType
         $builder
             ->add('medicines')
             ->add('description')
+            ->add('consultation', EntityType::class, [
+                'class' => Consultation::class,
+'choice_label' => 'id',
+            ])
         ;
     }
 

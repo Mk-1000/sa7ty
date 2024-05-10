@@ -27,6 +27,9 @@ class Doctor
     #[ORM\Column(length: 255)]
     private ?string $officePhone = null;
 
+    #[ORM\OneToMany(targetEntity: Consultation::class, mappedBy: 'doctor')]
+    private Collection $Consultations;
+
     #[ORM\OneToOne(mappedBy: 'Doctor', cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
@@ -40,10 +43,11 @@ class Doctor
     private Collection $Secretarys;
 
     #[ORM\OneToOne(mappedBy: 'doctor', cascade: ['persist', 'remove'])]
-    private ?Avilibility $avilibility = null;
+    private ?Availability $availability = null;
 
     public function __construct()
     {
+        $this->Consultations = new ArrayCollection();
         $this->blogs = new ArrayCollection();
         $this->appointments = new ArrayCollection();
         $this->Secretarys = new ArrayCollection();
@@ -98,6 +102,36 @@ class Doctor
     public function setOfficePhone(string $officePhone): static
     {
         $this->officePhone = $officePhone;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Consultation>
+     */
+    public function getConsultations(): Collection
+    {
+        return $this->Consultations;
+    }
+
+    public function addConsultation(Consultation $consultation): static
+    {
+        if (!$this->Consultations->contains($consultation)) {
+            $this->Consultations->add($consultation);
+            $consultation->setDoctor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConsultation(Consultation $consultation): static
+    {
+        if ($this->Consultations->removeElement($consultation)) {
+            // set the owning side to null (unless already changed)
+            if ($consultation->getDoctor() === $this) {
+                $consultation->setDoctor(null);
+            }
+        }
 
         return $this;
     }
@@ -208,24 +242,19 @@ class Doctor
         return $this;
     }
 
-    public function getAvilibility(): ?Avilibility
+    public function getAvailability(): ?Availability
     {
-        return $this->avilibility;
+        return $this->availability;
     }
 
-    public function setAvilibility(?Avilibility $avilibility): static
+    public function setAvailability(Availability $availability): static
     {
-        // unset the owning side of the relation if necessary
-        if ($avilibility === null && $this->avilibility !== null) {
-            $this->avilibility->setDoctor(null);
-        }
-
         // set the owning side of the relation if necessary
-        if ($avilibility !== null && $avilibility->getDoctor() !== $this) {
-            $avilibility->setDoctor($this);
+        if ($availability->getDoctor() !== $this) {
+            $availability->setDoctor($this);
         }
 
-        $this->avilibility = $avilibility;
+        $this->availability = $availability;
 
         return $this;
     }

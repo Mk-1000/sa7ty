@@ -3,9 +3,7 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
-use App\Entity\Day;
 use App\Entity\Blog;
-use App\Entity\Hour;
 use App\Entity\User;
 use App\Entity\Doctor;
 use App\Entity\Patient;
@@ -13,6 +11,7 @@ use App\Entity\Secretary;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use App\Entity\Availability; 
 
 class AppFixtures extends Fixture
 {
@@ -26,24 +25,6 @@ class AppFixtures extends Fixture
     {
         // Instanciate Faker
         $faker = Factory::create('fr_FR');
-
-        // Create Admin
-        $user = new User();
-        $user->setEmail("admin@admin.com");
-        $user->setPassword(
-            $this->passwordHasher->hashPassword(
-                $user,
-                'admin' // Set a default password, you might want to use a better approach for passwords
-            )
-        );            $user->setFirstName($faker->firstName);
-        $user->setLastName($faker->lastName);
-        $user->setPhone($faker->phoneNumber);
-        $user->setGender($faker->boolean);
-        $user->setBirthdate($faker->dateTimeThisCentury->getTimestamp());
-        $user->setCreationDate(time());
-        $user->setRoles(['ROLE_ADMIN']);
-        $manager->persist($user);
-
 
         // Create Users and associate with entities
         for ($i = 0; $i < 10; $i++) {
@@ -76,6 +57,34 @@ class AppFixtures extends Fixture
                     // Associate Doctor with User
                     $user->setRoles(['ROLE_DOCTOR']);
                     $doctor->setUser($user);
+
+                    // Create availability for all days from 8:00 to 19:00
+                    $availability = new Availability();
+                    $availability->setDoctor($doctor);
+                    $availability->setConsultationDuration(30); // Assuming consultation duration is 30 minutes
+
+                    // Set start and end hours for all days
+                    $availability->setMonStartHour(new \DateTime('08:00:00'));
+                    $availability->setMonEndHour(new \DateTime('19:00:00'));
+
+                    $availability->setTueStartHour(new \DateTime('08:00:00'));
+                    $availability->setTueEndHour(new \DateTime('19:00:00'));
+
+                    $availability->setWedStartHour(new \DateTime('08:00:00'));
+                    $availability->setWedEndHour(new \DateTime('19:00:00'));
+
+                    $availability->setThuStartHour(new \DateTime('08:00:00'));
+                    $availability->setThuEndHour(new \DateTime('19:00:00'));
+
+                    $availability->setFriStartHour(new \DateTime('08:00:00'));
+                    $availability->setFriEndHour(new \DateTime('19:00:00'));
+                    
+                    $availability->setSatStartHour(new \DateTime('08:00:00'));
+                    $availability->setSatEndHour(new \DateTime('19:00:00'));
+
+
+                    $manager->persist($availability);
+
                     $manager->persist($doctor);
 
                     for ($i = 0; $i < 7; $i++) {
@@ -124,33 +133,6 @@ class AppFixtures extends Fixture
                     break;
             }
             $manager->persist($user);
-        }
-
-        $currentYear = (int) date('Y');
-        $daysInYear = (int) date('z', mktime(0, 0, 0, 12, 31, $currentYear)) + 1;
-
-        for ($i = 1; $i <= $daysInYear; $i++) {
-            $day = new Day();
-            $day->setDay($i);
-            $manager->persist($day);
-        }
-
-
-        // Loop through hours
-        for ($i = 0; $i <= 23; $i++) {
-            // Loop through minutes
-            for ($j = 0; $j <= 59; $j++) {
-                // Create new Hour object
-                $hour = new Hour();
-                
-                // Format hour and minute strings
-                $hourStr = sprintf("%02d:%02d", $i, $j);
-                
-                // Set start time for the hour object
-                $hour->setStartTime($hourStr);
-                
-                $manager->persist($hour);
-            }
         }
 
         // Flush objects

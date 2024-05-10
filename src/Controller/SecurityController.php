@@ -16,11 +16,6 @@ class SecurityController extends AbstractController
         if ($this->getUser()) {
             // Redirect based on user role
             switch ($this->getUser()->getRoles()[0]) {
-                case 'ROLE_ADMIN':
-                    
-                    // Redirect to the route to show the doctor details
-                    return $this->redirectToRoute('app_doctor_index');
-
                 case 'ROLE_DOCTOR':
                     // Check if the user has a doctor entity
                     $doctor = $this->getUser()->getDoctor();

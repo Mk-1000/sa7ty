@@ -1,0 +1,206 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Appointment index
+{% endblock %}
+
+{% block addstylesheets %}
+{{parent()}}
+	<style>
+		.card {
+			max-width: 100%;
+			border: 1px solid #ccc;
+			border-radius: 8px;
+			overflow: hidden;
+			margin: 20px auto;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		}
+
+		.card .content {
+			padding: 20px;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			gap: 10px;
+		}
+
+		.card.expanded .content {
+			margin-bottom: 10px;
+		}
+
+		#more {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin-top: 10px;
+		}
+
+		.desc,
+		.calond {
+			flex: 1; /* Adjust to share space on larger screens */
+			margin-bottom: 0; /* No margin-bottom */
+			padding-bottom: 0; /* No padding-bottom */
+		}
+
+		.table {
+			width: 100%; /* Use full container width */
+			overflow-x: auto; /* Make table scrollable on small screens */
+			margin-top: 0; /* No additional margin-top */
+		}
+
+		td {
+			background-color: #e5f9ff;
+			padding: 8px;
+			border-radius: 5px;
+			text-align: center;
+			border: 1px solid #ddd;
+		}
+
+		td:hover {
+			background-color: #ccf2ff;
+		}
+
+        .btn-sm {
+        padding: 3px 6px; /* Smaller padding for a more compact design */
+        font-size: 0.8rem; /* Smaller font size for space efficiency */
+        line-height: 1; /* Normal line height to keep button compact */
+        border-radius: 4px; /* Rounded corners for a smoother look */
+        border: 1px solid transparent; /* Border to enhance visibility */
+        cursor: pointer; /* Cursor pointer to indicate clickable */
+        transition: background-color 0.3s, border-color 0.3s; /* Smooth transition for interactive feedback */
+    }
+
+    .btn-book {
+        background-color: #007bff; /* Primary color for visibility */
+        color: white; /* Text color for contrast */
+    }
+
+    .btn-book:hover, .btn-book:focus {
+        background-color: #0056b3; /* Darker background on hover/focus for feedback */
+        border-color: #004095; /* Darker border on hover/focus for depth */
+    }
+
+		@media(min-width: 768px) {
+			.desc,
+			.calond {
+				flex: 1; /* Flex adjustments for large screens */
+				margin-bottom: 0; /* Specifically remove any bottom margin */
+			}
+		}
+
+		@media(max-width: 767px) {
+			.card .content {
+				flex-direction: column;
+			}
+		}
+
+		thead td {
+			font-style: italic;
+			font-weight: normal;
+			background-color: transparent;
+		}
+
+		.visit {
+			background-color: #107aca;
+			color: white;
+			padding: 10px 20px;
+			border-radius: 10px;
+			transition: background-color 0.3s;
+		}
+
+		.visit:hover {
+			background-color: #045fae;
+		}
+	</style>
+{% endblock %}
+
+
+{% block body %}
+{% for doctor in doctors %}
+
+	<div class="overflow-hidden space">
+		<div class="container">
+
+			<div class="card">
+				<div class="content">
+					<div id="desc{{ doctor.id }}" class="desc">
+						<h4>{{ doctor.getUser.getFullName }}</h4>
+						<h6>{{ doctor.specialty }}</h6>
+					</div>
+					<div id="calond{{ doctor.id }}" class="calond">
+						<table>
+							<thead>
+								<tr>
+									{% for day in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] %}
+										{% set startHour = attribute(doctor.getAvailability, 'get' ~ day ~ 'StartHour') %}
+										{% set endHour = attribute(doctor.getAvailability, 'get' ~ day ~ 'EndHour') %}
+										{% if startHour and endHour %}
+											<th>{{ day }}</th>
+										{% endif %}
+									{% endfor %}
+								</tr>
+							</thead>
+							<tbody>
+								{% set maxIntervals = 0 %}
+								{% for day in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] %}
+									{% set startHour = attribute(doctor.getAvailability, 'get' ~ day ~ 'StartHour') %}
+									{% set endHour = attribute(doctor.getAvailability, 'get' ~ day ~ 'EndHour') %}
+									{% if startHour and endHour %}
+										{% set intervals = (endHour.timestamp - startHour.timestamp) / (doctor.getAvailability.consultationDuration * 60) %}
+										{% set maxIntervals = max(maxIntervals, intervals) %}
+									{% endif %}
+								{% endfor %}
+								{% for i in 0..maxIntervals %}
+									<tr class="{{ i >= 3 ? 'extra-rows' : '' }}" style="{{ i >= 3 ? 'display: none;' : '' }}">
+										{% for day in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] %}
+											{% set startHour = attribute(doctor.getAvailability, 'get' ~ day ~ 'StartHour') %}
+											{% set endHour = attribute(doctor.getAvailability, 'get' ~ day ~ 'EndHour') %}
+											{% if startHour and endHour %}
+												{% set StartConsultation = startHour|date_modify('+' ~ i * doctor.getAvailability.consultationDuration ~ ' minutes') %}
+												{% set EndConsultation = StartConsultation|date_modify('+' ~ doctor.getAvailability.consultationDuration ~ ' minutes') %}
+												{% set date_timestamp = StartConsultation|date('U') %} <!-- Define the timestamp here -->
+
+												{% if StartConsultation <= endHour and EndConsultation <= endHour %}
+													<td>
+														{{ StartConsultation|date('H:i') }} - {{ EndConsultation|date('H:i') }}
+														<br>
+														<a href="{{ path('app_appointment_book_now', {'doctorId': doctor.id, 'dateTimeStamp': date_timestamp, 'startAt': StartConsultation|date('U')}) }}" class="btn-sm btn-book">Book</a>
+													</td>
+												{% endif %}
+											{% endif %}
+										{% endfor %}
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+
+						<div id="more{{ doctor.id }}" class="more">
+							<button class="th-btn read-more-btn" data-card="{{ doctor.id }}">See More Times</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+
+
+</div>
+
+</div>
+{% endblock %}
+
+{% block addJavascript %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const readMoreBtns = document.querySelectorAll('.read-more-btn');
+        readMoreBtns.forEach((btn) => {
+            btn.addEventListener('click', function () {
+                const cardId = btn.getAttribute('data-card');
+                const extraRows = document.querySelectorAll(`#calond${cardId} .extra-rows`);
+                extraRows.forEach(row => {
+                    row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
+                });
+                btn.textContent = btn.textContent === 'See More Times' ? 'See Less Times' : 'See More Times';
+            });
+        });
+    });
+</script>
+{% endblock %}

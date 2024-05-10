@@ -45,14 +45,4 @@ class AppointmentRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
-
-    public function findByDoctorId(int $doctorId): array
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.doctor = :doctorId')
-            ->setParameter('doctorId', $doctorId)
-            ->getQuery()
-            ->getResult();
-    }
-
 }
