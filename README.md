@@ -68,4 +68,4 @@ Below is the class diagram for the Sa7ty project, detailing the structure and re
 
 Below is the Chay System for the Sa7ty project, showing a exemple of a user:
 
-![Sa7ty Class Diagram](https://github.com/Mk-1000/sa7ty/assets/86926622/d747937c-d3ba-47b4-b2f3-28a972ff9853)
+![Sa7ty Class Diagram](https://github.com/Mk-1000/sa7ty/assets/upload/chat-bot.png)
