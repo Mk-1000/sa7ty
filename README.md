@@ -64,8 +64,10 @@ Below is the class diagram for the Sa7ty project, detailing the structure and re
 
 ![Sa7ty Class Diagram](https://github.com/Mk-1000/sa7ty/assets/86926622/d747937c-d3ba-47b4-b2f3-28a972ff9853)
 
-## ScreenShot Chay System
+## Chat System Screenshot
 
-Below is the Chay System for the Sa7ty project, showing a exemple of a user:
+Below is a screenshot of the Chat System in the Sa7ty project, showcasing an example interaction with a user. This illustrates how the chatbot intelligently processes user symptoms and provides potential diagnoses and precautions:
 
-![Sa7ty Class Diagram](https://github.com/Mk-1000/sa7ty/blob/main/public/assets/upload/chat-bot.png)
+![Chatbot Interaction](https://github.com/Mk-1000/sa7ty/blob/main/public/assets/upload/chat-bot.png)
+
+
